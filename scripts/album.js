@@ -30,6 +30,23 @@
      ]
  };
 
+// Example Album
+var albumBucy = {
+    title: 'Order of the Awkward',
+    artist: 'Backlash',
+    label: 'Blizzard',
+    year: '2015',
+    albumArtUrl: 'assets/images/album_covers/18.png',
+    songs: [
+        { title: 'Grand Pooba Rock', duration: '4:23' },
+        { title: 'Stuff & Things', duration: '3:12' },
+        { title: 'KeK', duration: '1:59' },
+        { title: 'Hero\'s Sojourn', duration: '2:22' },
+        { title: 'Ghost Wolf', duration: '3:49' },
+        { title: 'Either Or, Neither Nor', duration: '3:33' }
+    ]
+};
+
 var createSongRow = function(songNumber, songName, songLength) {
      var template =
         '<tr class="album-view-song-item">'
@@ -42,29 +59,34 @@ var createSongRow = function(songNumber, songName, songLength) {
      return template;
  };
 
+var albumTitle = document.getElementsByClassName('album-view-title')[0];
+var albumArtist = document.getElementsByClassName('album-view-artist')[0];
+var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
+var albumImage = document.getElementsByClassName('album-cover-art')[0];
+var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
+
 var setCurrentAlbum = function(album) {
-     // #1
-     var albumTitle = document.getElementsByClassName('album-view-title')[0];
-     var albumArtist = document.getElementsByClassName('album-view-artist')[0];
-     var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
-     var albumImage = document.getElementsByClassName('album-cover-art')[0];
-     var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
- 
-     // #2
      albumTitle.firstChild.nodeValue = album.title;
      albumArtist.firstChild.nodeValue = album.artist;
      albumReleaseInfo.firstChild.nodeValue = album.year + ' ' + album.label;
      albumImage.setAttribute('src', album.albumArtUrl);
- 
-     // #3
      albumSongList.innerHTML = '';
- 
-     // #4
+    
      for (var i = 0; i < album.songs.length; i++) {
          albumSongList.innerHTML += createSongRow(i + 1, album.songs[i].title, album.songs[i].duration);
      }
  };
  
- window.onload = function() {
-     setCurrentAlbum(albumPicasso);
+ window.onload = function() { 
+     setCurrentAlbum(albumMarconi);
+     
+     var albumArray = [albumPicasso, albumMarconi, albumBucy];
+     var tempIndex = 1;
+     albumImage.addEventListener("click", function(event){
+         setCurrentAlbum(albumArray[tempIndex]);
+         tempIndex++;
+         if (tempIndex == albumArray.length){
+             tempIndex = 0;
+         }
+     });
  };
