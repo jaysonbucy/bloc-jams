@@ -104,7 +104,7 @@ var getSongItem = function(element){
         case 'album-view-song-item':
             return element.querySelector('.song-item-number')
             break;
-        case 'song-item-number':
+        casea 'song-item-number':
             return element;
             break;
         default:
