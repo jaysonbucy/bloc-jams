@@ -123,12 +123,12 @@ var setSong = function(songNumber){
          preload: true
      });
      setVolume(currentVolume);
-     var setVolume = function(volume) {
-
-     if (currentSoundFile) {
-        currentSoundFile.setVolume(volume);
-     }
 };
+
+var setVolume = function(volume) {
+  if (currentSoundFile) {
+   currentSoundFile.setVolume(volume);
+ }
 };
 
 var getSongNumberCell = function(number){
@@ -164,6 +164,7 @@ var clickHandler = function() {
       $('.main-controls .play-pause').html(playerBarPlayButton);
       currentSoundFile.pause();
     }
+  }
 };
 
 var playButtonTemplate = '<a class="album-song-button"><span class="ion-play"></span></a>';
