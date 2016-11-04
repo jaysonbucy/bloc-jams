@@ -102,10 +102,10 @@ var previousSong = function() {
 
     var previousSongNumber = getLastSongNumber(currentSongIndex);
     var $previousSongNumberCell = getSongNumberCell(currentlyPlayingSongNumber);
-    var $previousSongNumberCell = getSongNumberCell(previousSongNumber);
+    var $lastSongNumberCell = getSongNumberCell(previousSongNumber);
 
     $previousSongNumberCell.html(pauseButtonTemplate);
-    $previousSongNumberCell.html(previousSongNumber);
+    $lastSongNumberCell.html(previousSongNumber);
 
 };
 
