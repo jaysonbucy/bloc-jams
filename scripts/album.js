@@ -139,7 +139,8 @@ var clickHandler = function() {
 	} else if (currentlyPlayingSongNumber === songNumber) {
 		$(this).html(playButtonTemplate);
         $('.main-controls .play-pause').html(playerBarPlayButton);
-		    setSong(null);
+        currentlyPlayingSongNumber = null;
+        currentSongFromAlbum = null;
 	}
 };
 
