@@ -65,6 +65,7 @@ var nextSong = function() {
     }
 
     setSong(currentSongIndex + 1);
+    currentSoundFile.play();
     currentSongFromAlbum = currentAlbum.songs[currentSongIndex];
 
     $('.currently-playing .song-name').text(currentSongFromAlbum.title);
@@ -94,6 +95,7 @@ var previousSong = function() {
     }
 
     setSong(currentSongIndex + 1);
+    currentSoundFile.play();
 
     $('.currently-playing .song-name').text(currentSongFromAlbum.title);
     $('.currently-playing .artist-name').text(currentAlbum.artist);
@@ -110,8 +112,23 @@ var previousSong = function() {
 };
 
 var setSong = function(songNumber){
+  if (currentSoundFile) {
+         currentSoundFile.stop();
+    }
   currentlyPlayingSongNumber = parseInt(songNumber);
   currentSongFromAlbum = currentAlbum.songs[songNumber - 1];
+
+  currentSoundFile = new buzz.sound(currentSongFromAlbum.audioUrl, {
+         formats: [ 'mp3' ],
+         preload: true
+     });
+     setVolume(currentVolume);
+};
+
+var setVolume = function(volume) {
+  if (currentSoundFile) {
+   currentSoundFile.setVolume(volume);
+ }
 };
 
 var getSongNumberCell = function(number){
@@ -135,13 +152,19 @@ var clickHandler = function() {
 	if (currentlyPlayingSongNumber !== songNumber) {
 	   $(this).html(pauseButtonTemplate);
 	    setSong(songNumber);
+      currentSoundFile.play();
       updatePlayerBarSong();
 	} else if (currentlyPlayingSongNumber === songNumber) {
-		$(this).html(playButtonTemplate);
-        $('.main-controls .play-pause').html(playerBarPlayButton);
-        currentlyPlayingSongNumber = null;
-        currentSongFromAlbum = null;
-	}
+    if (currentSoundFile.isPaused()) {
+      $(this).html(pauseButtonTemplate);
+      $('.main-controls .play-pause').html(playerBarPauseButton);
+      currentSoundFile.play();
+    } else {
+      $(this).html(playButtonTemplate);
+      $('.main-controls .play-pause').html(playerBarPlayButton);
+      currentSoundFile.pause();
+    }
+  }
 };
 
 var playButtonTemplate = '<a class="album-song-button"><span class="ion-play"></span></a>';
@@ -154,9 +177,11 @@ var $previousButton = $('.main-controls .previous');
 var $nextButton = $('.main-controls .next');
 var currentlyPlayingSongNumber = null;
 var currentSongFromAlbum = null;
+var currentSoundFile = null;
+var currentVolume = 80;
 
 $(document).ready(function() {
-     setCurrentAlbum(albumBucy);
+     setCurrentAlbum(albumPicasso);
      $previousButton.click(previousSong);
      $nextButton.click(nextSong);
  });
