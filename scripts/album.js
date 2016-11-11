@@ -82,15 +82,26 @@ var setCurrentAlbum = function(album) {
      }
  };
 
+var setSong = function(songNumber){
+   if (currentSoundFile) {
+     currentSoundFile.stop();
+   }
+   currentlyPlayingSongNumber = parseInt(songNumber);
+   currentSongFromAlbum = currentAlbum.songs[songNumber - 1];
+   currentSoundFile = new buzz.sound(currentSongFromAlbum.audioUrl, {
+          formats: [ 'mp3' ],
+          preload: true
+      });
+      setVolume(currentVolume);
+ };
+
 var updateSeekBarWhileSongPlays = function() {
      if (currentSoundFile) {
          currentSoundFile.bind('timeupdate', function(event) {
-             var currentTime = this.getTime();
-             var songLength = this.getDuration();
-             var seekBarFillRatio = currentTime / songLength;
+             var seekBarFillRatio = this.getTime() / this.getDuration();
              var $seekBar = $('.seek-control .seek-bar');
              updateSeekPercentage($seekBar, seekBarFillRatio);
-             setCurrentTimeInPlayerBar(filterTimeCode(currentTime));
+             setCurrentTimeInPlayerBar(filterTimeCode(this.getTime()));
          });
      }
  };
@@ -154,14 +165,14 @@ var togglePlayFromPlayerbar = function() {
 };
 
 var setCurrentTimeInPlayerBar = function(currentTime) {
-    var $currentTimeCell = $('.time .current-time');
+    var $currentTimeCell = $('.seek-control .current-time');
     $currentTimeCell.html(currentTime);
 };
 
 var setTotalTimeInPlayerBar = function(totalTime) {
-    var $totalTimeCell = $('.time .total-time');
-    $totalTimeCell.text(totalTime);
-};
+    var $totalTimeCell = $('.seek-control .total-time');
+    $totalTimeCell.html(totalTime);
+  };
 
 var filterTimeCode = function(timeInSeconds) {
     var seconds = Number.parseFloat(timeInSeconds);
@@ -244,19 +255,6 @@ var previousSong = function() {
 
 };
 
-var setSong = function(songNumber){
-  if (currentSoundFile) {
-    currentSoundFile.stop();
-  }
-  currentlyPlayingSongNumber = parseInt(songNumber);
-  currentSongFromAlbum = currentAlbum.songs[songNumber - 1];
-  currentSoundFile = new buzz.sound(currentSongFromAlbum.audioUrl, {
-         formats: [ 'mp3' ],
-         preload: true
-     });
-     setVolume(currentVolume);
-};
-
 var seek = function(time) {
    if (currentSoundFile) {
        currentSoundFile.setTime(time);
@@ -278,7 +276,7 @@ var updatePlayerBarSong = function(){
     $('.currently-playing .artist-name').text(currentAlbum.artist);
     $('.currently-playing .artist-song-mobile').text(currentAlbum.artist + " : " + currentSongFromAlbum.title);
     $playPauseButton.html(playerBarPauseButton);
-    setTotalTimeInPlayerBar(filterTimeCode(currentSongFromAlbum.length));
+    setTotalTimeInPlayerBar(filterTimeCode(currentSongFromAlbum.duration));
 };
 
 var playButtonTemplate = '<a class="album-song-button"><span class="ion-play"></span></a>';
