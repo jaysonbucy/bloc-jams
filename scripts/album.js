@@ -92,6 +92,7 @@ var setSong = function(songNumber){
           formats: [ 'mp3' ],
           preload: true
       });
+      debugger;
       setVolume(currentVolume);
  };
 
@@ -128,6 +129,8 @@ var updateSeekBarWhileSongPlays = function() {
          } else {
              setVolume(seekBarFillRatio * 100);
          }
+         debugger;
+         console.log("I am here");
          updateSeekPercentage($(this), seekBarFillRatio);
      });
 
@@ -153,6 +156,11 @@ var updateSeekBarWhileSongPlays = function() {
 
 var togglePlayFromPlayerbar = function() {
     var $currentlyPlayingCell = getSongNumberCell(currentlyPlayingSongNumber);
+    if (currentSoundFile === null){
+      setSong(1);
+      updatePlayerBarSong();
+      setCurrentTimeInPlayerBar(filterTimeCode(currentSoundFile.getTime()));
+    }
     if (currentSoundFile.isPaused()) {
         $currentlyPlayingCell.html(pauseButtonTemplate);
         $(this).html(playerBarPauseButton);
